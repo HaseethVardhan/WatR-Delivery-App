@@ -89,4 +89,62 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        return res
+        .status(400)
+        .json(
+            new ApiResponse(400, {errors: errors.array(), message: "Enter correct password and mail id."}, "Validation Error")
+        )
+    }
+
+    const { email, password } = req.body
+    
+    if(!email || !password){
+        return res
+      .status(400)
+      .json(
+        new ApiResponse(
+          400,
+          { message: "Please fill all the fields" },
+          "Please fill all the fields"
+        )
+      );
+    }
+
+    const user = await User.findOne({email})
+
+    if(!user){
+        return res
+        .status(400)
+        .json(
+            new ApiResponse(400, {message: "User not found"}, "User not found")
+        )
+    }
+
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
+
+    if(!isPasswordCorrect){
+        return res
+        .status(400)
+        .json(
+            new ApiResponse(400, {message: "Invalid password"}, "Invalid password")
+        )
+    }
+
+    const token = await user.generateAuthToken()
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .cookie('token', token, options)
+    .json(new ApiResponse(200, {user, token, message: "User login succesfull"}, 'User logged in'))
+})
+
+export { registerUser, loginUser };

@@ -54,7 +54,8 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     phone,
-  }).select("-password");
+  })
+
 
   const token = await user.generateAuthToken()
 
@@ -62,6 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true
 }
+
 
   if (user) {
     return res
@@ -137,7 +139,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const token = await user.generateAuthToken()
 
     const options = {
-        httpOnly: true,
+        httpOnly: true, 
         secure: true
     }
 
@@ -147,4 +149,17 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {user, token, message: "User login succesfull"}, 'User logged in'))
 })
 
-export { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req,res) => {
+  const options = {
+    httpOnly: true,
+    secure: true
+  }
+
+  return res
+      .status(200)
+      .clearCookie("token", options)
+      .json(new ApiResponse(200, {message: "User logged out successfully"}, "User logged Out"))
+})
+
+export { registerUser, loginUser, logoutUser };
+

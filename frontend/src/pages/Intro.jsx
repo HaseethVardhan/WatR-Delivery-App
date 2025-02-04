@@ -1,21 +1,66 @@
 import React from 'react'
 import Navbar from '../customComponents/Navbar.jsx'
 import{Button} from '@/components/ui/button.jsx'
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 const Intro = () => {
   return (
     <div>
         <Navbar />
         <div className='relative'>
-          <img src="https://media.istockphoto.com/id/1193333115/photo/plastic-bottles-of-natural-spring-water.jpg?s=612x612&w=0&k=20&c=9hWvVryq704WMnn0USZ61k5NmTIZOz2wUVB8ng8sbHQ=" className='w-screen'/>
+          <img src="https://media.istockphoto.com/id/1193333115/photo/plastic-bottles-of-natural-spring-water.jpg?s=612x612&w=0&k=20&c=9hWvVryq704WMnn0USZ61k5NmTIZOz2wUVB8ng8sbHQ=" className='w-screen max-h-[300px]'/>
           <div className='absolute bottom-2 left-3'>
             <h1 className='text-white font-sans text-3xl font-black'>Drinking water,</h1>
             <h1 className='text-white font-sans text-3xl font-black'>delivered</h1>
             <p className='text-white text-xs py-3'>Get your first month free. Cancel anytime.</p>
             <Button className='bg-[#2180DE] font-sans rounded-xl text-sm font-semibold'>Start now</Button>
           </div>
+          
         </div>
-        
+        <div className='flex justify-evenly flex-wrap mt-5'>
+          <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
+            <CardHeader className='py-5'>
+            <i className="ri-truck-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
+              <CardDescription className=''>Fast and free delivery</CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
+            <CardHeader className='py-5'>
+            <i className="ri-truck-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
+              <CardDescription className=''>Fast and free delivery</CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
+            <CardHeader className='py-5'>
+            <i className="ri-truck-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
+              <CardDescription className=''>Fast and free delivery</CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
+            <CardHeader className='py-5'>
+            <i className="ri-truck-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
+              <CardDescription className=''>Fast and free delivery</CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+        <div className='flex justify-center py-10'>
+          <Button variant='secondary' className='w-screen max-w-[360px] h-[50px] font-bold rounded-lg bg-gray-100'>Become a supplier</Button>
+        </div>
+        <div className='flex justify-center'>
+        <p className='text-gray-400 mb-6'>© 2022 Watr. All rights reserved.</p>
+        </div>
     </div>
   )
 }

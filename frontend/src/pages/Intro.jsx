@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import Navbar from '../customComponents/Navbar.jsx'
 import{Button} from '@/components/ui/button.jsx'
 import {
@@ -18,7 +19,9 @@ const Intro = () => {
             <h1 className='text-white font-sans text-3xl font-black'>Drinking water,</h1>
             <h1 className='text-white font-sans text-3xl font-black'>delivered</h1>
             <p className='text-white text-xs py-3'>Get your first month free. Cancel anytime.</p>
-            <Button className='bg-[#2180DE] font-sans rounded-xl text-sm font-semibold'>Start now</Button>
+            <Link to='/user-home'>
+              <Button className='bg-[#2180DE] font-sans rounded-xl text-sm font-semibold'>Start now</Button>
+            </Link>
           </div>
           
         </div>
@@ -56,7 +59,9 @@ const Intro = () => {
           </Card>
         </div>
         <div className='flex justify-center py-10'>
+        <Link to='/supplier-home'>
           <Button variant='secondary' className='w-screen max-w-[360px] h-[50px] font-bold rounded-lg bg-gray-100'>Become a supplier</Button>
+        </Link>
         </div>
         <div className='flex justify-center'>
         <p className='text-gray-400 mb-6'>© 2022 Watr. All rights reserved.</p>

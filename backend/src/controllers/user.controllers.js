@@ -4,6 +4,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { validationResult } from "express-validator";
 
 const registerUser = asyncHandler(async (req, res) => {
+
+
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {

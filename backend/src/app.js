@@ -7,10 +7,7 @@ import addressRouter from './routes/address.routes.js'
 
 const app = express()
 
-app.use(cors({
-    origin: process.env.ORIGIN_CORS,
-    credentials: true
-}))
+app.use(cors({}))
 
 app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true, limit: "16kb"}))

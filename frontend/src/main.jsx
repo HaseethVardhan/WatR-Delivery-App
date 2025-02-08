@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import UserContext from "./context/UserContext.jsx";
 import { User } from "lucide-react";
 
+
 createRoot(document.getElementById("root")).render(
   <UserContext>
     <BrowserRouter>

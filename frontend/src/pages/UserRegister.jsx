@@ -1,11 +1,15 @@
 import React from "react";
 import Navbar from "../customComponents/Navbar.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import {UserDataContext} from '../context/UserContext'
 
 const UserRegister = () => {
+
+  const navigate = useNavigate()
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -13,16 +17,49 @@ const UserRegister = () => {
   const [lastname, setLastname] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const [loading, setLoading] = React.useState(false);
+  const [errorDisplay, setErrorDisplay] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
+  const {user, setuser} = React.useContext(UserDataContext)
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,{
+        firstname,
+        lastname,
+        email,
+        phone,
+        password
+      })
+      
+      if(response.status === 201){
+        setLoading(false);
+        setuser(response.data.data.user);
+        localStorage.setItem('token', response.data.data.token);
+        navigate('/user-home');
+      }
+    } catch (error) {
+        setLoading(false);
+        setErrorMessage(error.response.data.data.message);
+        setErrorDisplay(true);
+    }
   }
 
   return (
-    <div>
+    <div className="relative">
+      {loading && <div className="absolute w-screen h-screen flex justify-center items-center backdrop-blur-sm font-semibold text-2xl">
+        Loading...
+      </div>}
       <Navbar />
       <div className="w-screen flex flex-col justify-center items-center">
         <h1 className="font-black text-xl py-5">User Register</h1>
+        <div className="text-red-500 text-sm font-semibold">
+          {errorDisplay && errorMessage}
+        </div>
         <div className="w-[80%] max-w-[500px] flex flex-col">
           <Label htmlFor="firstname" className="py-2 px-2 font-semibold italic">
             Firstname

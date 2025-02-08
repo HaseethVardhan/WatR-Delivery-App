@@ -12,7 +12,7 @@ router.route('/register').post([
     body('phone').isMobilePhone().withMessage('Invalid phone number')
 ], registerUser)
 
-router.route('/login').get([
+router.route('/login').post([
     body('email').isEmail().withMessage('Invalid mail'),
     body('password').isLength({ min: 6}).withMessage('Password should be atleast 6 characters long')
 ], loginUser)

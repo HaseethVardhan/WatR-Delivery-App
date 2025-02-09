@@ -1,49 +1,29 @@
 import mongoose from 'mongoose';
 
 const addressSchema = new mongoose.Schema({
-  street: {
+  placeString: {
     type: String,
-    required: true,
-    trim: true
-  },
-  city: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  state: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  country: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  postalCode: {
-    type: String,
-    required: true,
-    trim: true
+    required: true
   },
   location: {
-    type: {
+    ltd: {
       type: String,
-      enum: ['Point'],
-      default: 'Point'
+      required: true
     },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
+    lng: {
+      type: String,
       required: true
     }
   },
-  formattedAddress: String,
-  placeId: String
+  placeId: {
+    type: String,
+    required: true
+  }
 }, {
   timestamps: true
 });
 
-addressSchema.index({ location: '2dsphere' });
+
 
 const Address = mongoose.model('Address', addressSchema);
 

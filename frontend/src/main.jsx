@@ -4,13 +4,14 @@ import App from "./App.jsx";
 import "remixicon/fonts/remixicon.css";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "./context/UserContext.jsx";
-import { User } from "lucide-react";
-
+import SupplierContext from "./context/SupplierContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <UserContext>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </UserContext>
+  <SupplierContext>
+    <UserContext>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </UserContext>
+  </SupplierContext>
 );

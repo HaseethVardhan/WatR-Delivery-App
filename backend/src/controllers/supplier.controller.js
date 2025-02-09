@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Supplier } from "../models/supplier.models.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { validationResult } from "express-validator";
+import axios from 'axios'
 
 const registerSupplier = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
@@ -14,7 +15,7 @@ const registerSupplier = asyncHandler(async (req, res) => {
         );
     }
     
-    const { username, email, password, phone, suppliername } = req.body;
+    const { username, email, password, phone, suppliername, placeString, placeId } = req.body;
     
     if (
         [username, email, password, phone, suppliername].some(
@@ -45,6 +46,11 @@ const registerSupplier = asyncHandler(async (req, res) => {
             )
         );
     }
+
+    const finalAddress = await axios.post('http://localhost:8000/address/create-address', {
+        placeId,
+        placeString
+    })
     
     const supplier = await Supplier.create({
         username,
@@ -52,6 +58,7 @@ const registerSupplier = asyncHandler(async (req, res) => {
         suppliername,
         password,
         phone,
+        address: finalAddress.data.data.address._id
     })
 
     if(!supplier){
@@ -174,4 +181,10 @@ const logoutSupplier = asyncHandler(async (req,res) => {
           .json(new ApiResponse(200, {message: "User logged out successfully"}, "Supplier logged Out"))
 })
 
-export { registerSupplier, loginSupplier, logoutSupplier }
+const getSupplierProfile = asyncHandler(async (req,res) => {
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {supplier: req.supplier, message: "Supplier profile fetched successfully"}, "Supplier profile fetched successfully"))
+  })
+
+export { registerSupplier, loginSupplier, logoutSupplier, getSupplierProfile }

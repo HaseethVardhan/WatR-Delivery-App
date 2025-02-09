@@ -1,29 +1,17 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { createAddress, editAddress } from "../controllers/address.controllers.js";
+import { createAddress, editAddress, getAutoSuggestions } from "../controllers/address.controllers.js";
 
 const router = Router();
 
 router.route('/create-address').post([
-    body('street').isString().withMessage('Street must be a string'),
-    body('city').isString().withMessage('City must be a string'),
-    body('state').isString().withMessage('State must be a string'),
-    body('country').isString().withMessage('Country must be a string'),
-    body('postalCode').isString().withMessage('Postal code must be a string'),
-    body('location').isObject().withMessage('Location must be an object'),
-    body('formattedAddress').isString().withMessage('Formatted address must be a string'),
-    body('placeId').isString().withMessage('Place ID must be a string')
+    body('placeId').isString(),
+    body('placeString').isString()
 ], createAddress)
 
 router.route('/edit-address').post([
-    body('street').isString().withMessage('Street must be a string'),
-    body('city').isString().withMessage('City must be a string'),
-    body('state').isString().withMessage('State must be a string'),
-    body('country').isString().withMessage('Country must be a string'),
-    body('postalCode').isString().withMessage('Postal code must be a string'),
-    body('location').isObject().withMessage('Location must be an object'),
-    body('formattedAddress').isString().withMessage('Formatted address must be a string'),
-    body('placeId').isString().withMessage('Place ID must be a string')
 ], editAddress)
+
+router.route('/get-address-suggestions').post(body('input').isString(),getAutoSuggestions)
 
 export default router

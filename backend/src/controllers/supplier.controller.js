@@ -3,8 +3,10 @@ import { Supplier } from "../models/supplier.models.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { validationResult } from "express-validator";
 import axios from 'axios'
+import createAddressService from "../services/map.services.js";
 
 const registerSupplier = asyncHandler(async (req, res) => {
+    
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
@@ -17,18 +19,21 @@ const registerSupplier = asyncHandler(async (req, res) => {
     
     const { username, email, password, phone, suppliername, placeString, placeId } = req.body;
     
+    
+    
+    
     if (
         [username, email, password, phone, suppliername].some(
-        (field) => field?.trim() === ""
+            (field) => field?.trim() === ""
         )
     ) {
         return res
         .status(400)
         .json(
             new ApiResponse(
-            400,
-            { message: "Please fill all the fields" },
-            "Please fill all the fields"
+                400,
+                { message: "Please fill all the fields" },
+                "Please fill all the fields"
             )
         );
     }
@@ -40,26 +45,28 @@ const registerSupplier = asyncHandler(async (req, res) => {
         .status(400)
         .json(
             new ApiResponse(
-            400,
+                400,
             { message: "Supplier already exists" },
             "Supplier already exists"
-            )
-        );
-    }
+        )
+    );
+}
 
-    const finalAddress = await axios.post('http://localhost:8000/address/create-address', {
-        placeId,
-        placeString
-    })
-    
-    const supplier = await Supplier.create({
-        username,
-        email,
-        suppliername,
-        password,
-        phone,
-        address: finalAddress.data.data.address._id
-    })
+
+
+
+const finalAddress = await createAddressService(placeId, placeString)
+
+
+const supplier = await Supplier.create({
+    username,
+    email,
+    suppliername,
+    password,
+    phone,
+    address: finalAddress._id
+})
+
 
     if(!supplier){
         return res

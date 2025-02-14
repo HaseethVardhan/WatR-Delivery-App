@@ -6,6 +6,10 @@ const productSchema = new mongoose.Schema({
         enum: ['can', 'bottle', 'packet'],
         required: true
     },
+    description:{
+        type: String,
+        required: true
+    },
     supplierId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Supplier',

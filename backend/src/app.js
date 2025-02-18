@@ -5,6 +5,7 @@ import userRouter from './routes/user.routes.js'
 import supplierRouter from './routes/supplier.routes.js'
 import addressRouter from './routes/address.routes.js'
 import productRouter from './routes/product.routes.js'
+import subscriptionRouter from './routes/subscription.routes.js'
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use('/user', userRouter)
 app.use('/supplier', supplierRouter)
 app.use('/address', addressRouter)
 app.use('/product', productRouter)
+app.use('/subscription', subscriptionRouter)
 
 
 export { app }

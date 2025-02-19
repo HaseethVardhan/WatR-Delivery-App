@@ -1,5 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Supplier } from "../models/supplier.models.js";
+import Address from '../models/address.models.js'
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { validationResult } from "express-validator";
 import axios from 'axios'
@@ -192,6 +193,60 @@ const getSupplierProfile = asyncHandler(async (req,res) => {
     return res
     .status(200)
     .json(new ApiResponse(200, {supplier: req.supplier, message: "Supplier profile fetched successfully"}, "Supplier profile fetched successfully"))
-  })
+})
 
-export { registerSupplier, loginSupplier, logoutSupplier, getSupplierProfile }
+const getSubscriptions = asyncHandler(async (req,res) => {
+    const supplier = await Supplier.findById(req.supplier._id)
+        .populate({
+            path: 'subscriptions',
+            populate: [
+                { path: 'address' },
+                { path: 'product' }
+            ]
+        });
+    
+
+    if (!supplier) {
+        return res
+        .status(404)
+        .json(new ApiResponse(404, {message: "Supplier not found"}, "Supplier not found"));
+    }
+
+
+    // Filter out expired subscriptions
+    const currentDate = new Date();
+    const activeSubscriptions = supplier.subscriptions.filter(sub => 
+        new Date(sub.expiryDate) > currentDate
+    );
+
+    // Calculate distances and sort
+    const supplierLocation = await Address.findById(supplier.address);
+    if (!supplierLocation) {
+        return res
+        .status(404)
+        .json(new ApiResponse(404, {message: "Supplier address not found"}, "Supplier address not found"));
+    }
+
+    // Add distance to each subscription
+    const subscriptionsWithDistance = activeSubscriptions.map(sub => {
+        const distance = Math.sqrt(
+            Math.pow(supplierLocation.location.ltd - sub.address.location.ltd, 2) +
+            Math.pow(supplierLocation.location.lng - sub.address.location.lng, 2)
+        );
+        return { ...sub.toObject(), distance };
+    });
+
+    // Sort by distance
+    const sortedSubscriptions = subscriptionsWithDistance.sort((a, b) => 
+        a.distance - b.distance
+    );
+
+    // Remove distance property before sending response
+    const finalSubscriptions = sortedSubscriptions.map(({distance, ...sub}) => sub);
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {subscriptions: finalSubscriptions}, "Subscriptions fetched successfully"));
+})
+
+export { registerSupplier, loginSupplier, logoutSupplier, getSupplierProfile, getSubscriptions }

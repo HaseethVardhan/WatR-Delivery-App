@@ -1,10 +1,12 @@
 import React from 'react'
 
-const OrderDetailsMin = () => {
+const OrderDetailsMin = (props) => {
   return (
-    <div className='flex flex-col w-[95%] border-2 border-gray-100 rounded-lg p-2'>
-        <p className='font-semibold'>20 Water Can</p>
-        <p className=''>R K Beach, Visakhapatnam, Andhra Pradesh</p>
+    <div className='flex flex-col border-2 border-gray-100 rounded-lg p-4 my-2'>
+      <div className='flex flex-col'>
+        <p className='font-semibold'>{props.subscription.quantity} Water {props.subscription.product.productType}</p>
+        <p className=''>{props.subscription.address.placeString}</p>
+      </div>
     </div>
   )
 }

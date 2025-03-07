@@ -8,6 +8,8 @@ import UserRegister from './pages/UserRegister.jsx'
 import UserHome from './pages/UserHome.jsx'
 import SupplierHome from './pages/SupplierHome.jsx'
 import { Routes, Route } from 'react-router-dom'
+import SupplierNewProduct from './pages/SupplierNewProduct.jsx'
+import SupplierViewProducts from './pages/SupplierViewProducts.jsx'
 
 
 function App() {
@@ -28,6 +30,16 @@ function App() {
         <Route path='/supplier-home' element={
           <SupplierProtectedWrapper>
             <SupplierHome />
+          </SupplierProtectedWrapper>
+        } />
+        <Route path='/supplier-create-subscription-model' element={
+          <SupplierProtectedWrapper>
+            <SupplierNewProduct />
+          </SupplierProtectedWrapper>
+        } />
+        <Route path='/supplier-view-subscription-model' element={
+          <SupplierProtectedWrapper>
+            <SupplierViewProducts />
           </SupplierProtectedWrapper>
         } />
       </Routes>

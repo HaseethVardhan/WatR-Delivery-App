@@ -32,4 +32,18 @@ const createProduct = asyncHandler(async (req,res) => {
         .json(new ApiResponse(201, {product,message: "Product successfully created"}, "Product successfully created"));
 })
 
-export {createProduct}
+const viewSupplierProducts = asyncHandler(async (req,res) => {
+    const products = await Product.find({supplierId: req.supplier._id})
+
+    if(!products){
+        return res
+        .status(500)
+        .json(new ApiResponse(500, {message: "Something went wrong while fetching products"}, "Something went wrong while fetching products"));
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {products,message: "Products successfully fetched"}, "Products successfully fetched"));
+})
+
+export {createProduct, viewSupplierProducts}

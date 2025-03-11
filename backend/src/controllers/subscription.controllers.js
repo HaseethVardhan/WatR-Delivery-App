@@ -59,4 +59,36 @@ const createSubscription = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, populatedSubscription, "Subscription created successfully"))
 })
 
-export {createSubscription}
+const cancelSubscription = asyncHandler(async (req, res) => {
+    const { subscriptionId } = req.body;
+
+    const subscription = await Subscription.findById(subscriptionId);
+
+    if (!subscription) {
+        return res
+        .status(404)
+        .json(new ApiResponse(404, null, "Subscription not found"));
+    }
+
+    if (subscription.customer.toString() !== req.user._id.toString()) {
+        return res
+        .status(403)
+        .json(new ApiResponse(403, null, "Not authorized to cancel this subscription"));
+    }
+
+    await Promise.all([
+        req.user.updateOne({ $pull: { subscriptions: subscriptionId } }),
+        Supplier.findByIdAndUpdate(subscription.supplier, {
+            $pull: { subscriptions: subscriptionId }
+        }),
+        Subscription.findByIdAndDelete(subscriptionId)
+    ]);
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Subscription cancelled successfully"));
+})
+
+
+
+export {createSubscription, cancelSubscription}

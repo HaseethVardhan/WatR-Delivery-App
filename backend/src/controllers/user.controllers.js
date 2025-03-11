@@ -169,5 +169,18 @@ const getUserProfile = asyncHandler(async (req,res) => {
   .json(new ApiResponse(200, {user: req.user, message: "User profile fetched successfully"}, "User profile fetched successfully"))
 })
 
-export { registerUser, loginUser, logoutUser, getUserProfile };
+const getUserSubscriptions = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).populate({
+    path: 'subscriptions',
+    populate: {
+      path: 'product'
+    }
+  })
+
+  return res
+  .status(200)
+  .json(new ApiResponse(200, {subscriptions: user.subscriptions, message: "User subscriptions fetched successfully"}, "User subscriptions fetched successfully"))
+})
+
+export { registerUser, loginUser, logoutUser, getUserProfile, getUserSubscriptions };
 

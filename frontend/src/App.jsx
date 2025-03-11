@@ -11,6 +11,7 @@ import { Routes, Route } from 'react-router-dom'
 import SupplierNewProduct from './pages/SupplierNewProduct.jsx'
 import SupplierViewProducts from './pages/SupplierViewProducts.jsx'
 import SupplierCustomers from './pages/SupplierCustomers.jsx'
+import NewSubType from './pages/NewSubType.jsx'
 
 
 function App() {
@@ -26,6 +27,11 @@ function App() {
         <Route path='/user-home' element={
           <UserProtectedWrapper>
             <UserHome />
+          </UserProtectedWrapper>
+        } />
+        <Route path='/new-subscription-type' element={
+          <UserProtectedWrapper>
+            <NewSubType />
           </UserProtectedWrapper>
         } />
         <Route path='/supplier-home' element={

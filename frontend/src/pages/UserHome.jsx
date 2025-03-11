@@ -1,10 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../customComponents/Navbar";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 const UserHome = () => {
   const [subscriptions, setSubscriptions] = React.useState();
   const [loading, setLoading] = React.useState(false);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -26,8 +30,6 @@ const UserHome = () => {
     };
 
     fetchSubscriptions();
-
-
   }, []);
 
   const handleCancelSubscription = async (subscriptionId) => {
@@ -44,12 +46,16 @@ const UserHome = () => {
           },
         }
       );
-      setSubscriptions(subscriptions.filter(subscription => subscription._id !== subscriptionId))
+      setSubscriptions(
+        subscriptions.filter(
+          (subscription) => subscription._id !== subscriptionId
+        )
+      );
     } catch (error) {
       console.error("Error cancelling subscription:", error);
     }
     setLoading(false);
-  }
+  };
 
   return (
     <div>
@@ -59,6 +65,17 @@ const UserHome = () => {
         </div>
       )}
       <Navbar />
+      <div className="flex justify-center">
+      <Button
+          onClick={() => {
+            navigate("/new-subscription-type");
+          }}
+          className="bg-green-500 shadow-none "
+        >
+          New Subscription
+        </Button>
+      </div>
+
       <div className="p-4">
         <h1 className="font-black text-xl pb-5">Your Active Subscriptions</h1>
         <div className="grid gap-4">
@@ -85,12 +102,17 @@ const UserHome = () => {
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <p className="text-sm text-gray-500">
-                  Expires: {new Date(subscription.expiryDate).toLocaleDateString()}
+                  Expires:{" "}
+                  {new Date(subscription.expiryDate).toLocaleDateString()}
                 </p>
-                <button 
+                <button
                   className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
                   onClick={() => {
-                    if (window.confirm('Are you sure you want to cancel this subscription? No refunds will be provided.')) {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to cancel this subscription? No refunds will be provided."
+                      )
+                    ) {
                       handleCancelSubscription(subscription._id);
                     }
                   }}

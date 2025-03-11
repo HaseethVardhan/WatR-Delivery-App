@@ -249,4 +249,60 @@ const getSubscriptions = asyncHandler(async (req,res) => {
     .json(new ApiResponse(200, {subscriptions: finalSubscriptions}, "Subscriptions fetched successfully"));
 })
 
-export { registerSupplier, loginSupplier, logoutSupplier, getSupplierProfile, getSubscriptions }
+const getCustomers = asyncHandler(async (req, res) => {
+    const supplier = await Supplier.findById(req.supplier._id)
+        .populate({
+            path: 'subscriptions',
+            populate: [
+                {
+                    path: 'customer',
+                    select: 'username email phone'
+                },
+                {
+                    path: 'product',
+                    select: 'productType description quantity cost'
+                },
+                {
+                    path: 'address',
+                    select: 'placeString location'
+                }
+            ]
+        });
+
+    if (!supplier) {
+        return res
+            .status(404)
+            .json(new ApiResponse(404, {message: "Supplier not found"}, "Supplier not found"));
+    }
+
+    const currentDate = new Date();
+    const activeSubscriptions = supplier.subscriptions.filter(sub => 
+        new Date(sub.expiryDate) > currentDate
+    );
+
+    const customerMap = new Map();
+    activeSubscriptions.forEach(sub => {
+        if (!customerMap.has(sub.customer._id.toString())) {
+            customerMap.set(sub.customer._id.toString(), {
+                customerInfo: sub.customer,
+                subscriptions: []
+            });
+        }
+        customerMap.get(sub.customer._id.toString()).subscriptions.push({
+            product: sub.product,
+            quantity: sub.quantity,
+            address: sub.address,
+            expiryDate: sub.expiryDate,
+            cost: sub.cost
+        });
+    });
+
+    const customerDetails = Array.from(customerMap.values());
+
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, customerDetails, "Customer details fetched successfully"));
+})
+
+export { registerSupplier, loginSupplier, logoutSupplier, getSupplierProfile, getSubscriptions, getCustomers }

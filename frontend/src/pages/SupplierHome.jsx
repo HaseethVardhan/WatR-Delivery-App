@@ -60,6 +60,15 @@ const SupplierHome = () => {
         >
           View All Subscription Models
         </Button>
+        <Button
+          onClick={() => {
+            navigate("/supplier-view-customers");
+          }}
+          className="shadow-none"
+          variant="secondary"
+        >
+          View Customers
+        </Button>
       </div>
       <h1 className="font-bold text-lg p-3">Today's Deliveries</h1>
       <div className="flex flex-col justify-center p-3 ">

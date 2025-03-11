@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { loginSupplier, registerSupplier, logoutSupplier, getSupplierProfile, getSubscriptions } from "../controllers/supplier.controller.js";
+import { loginSupplier, registerSupplier, logoutSupplier, getSupplierProfile, getSubscriptions, getCustomers } from "../controllers/supplier.controller.js";
 import { verifySupplier } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -31,5 +31,7 @@ router.route('/logout').get(verifySupplier, logoutSupplier)
 router.route('/get-supplier-profile').get(verifySupplier, getSupplierProfile)
 
 router.route('/get-subscriptions').get(verifySupplier, getSubscriptions)
+
+router.route('/get-customers').get(verifySupplier, getCustomers)
 
 export default router

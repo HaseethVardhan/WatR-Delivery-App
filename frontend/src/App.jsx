@@ -10,6 +10,7 @@ import SupplierHome from './pages/SupplierHome.jsx'
 import { Routes, Route } from 'react-router-dom'
 import SupplierNewProduct from './pages/SupplierNewProduct.jsx'
 import SupplierViewProducts from './pages/SupplierViewProducts.jsx'
+import SupplierCustomers from './pages/SupplierCustomers.jsx'
 
 
 function App() {
@@ -40,6 +41,11 @@ function App() {
         <Route path='/supplier-view-subscription-model' element={
           <SupplierProtectedWrapper>
             <SupplierViewProducts />
+          </SupplierProtectedWrapper>
+        } />
+        <Route path='/supplier-view-customers' element={
+          <SupplierProtectedWrapper>
+            <SupplierCustomers />
           </SupplierProtectedWrapper>
         } />
       </Routes>

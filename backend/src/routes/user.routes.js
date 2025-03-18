@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserProfile, getUserSubscriptions, loginUser, logoutUser, registerUser } from "../controllers/user.controllers.js";
+import { getUserProfile, getUserSubscriptions, loginUser, logoutUser, registerUser, addUserAddress } from "../controllers/user.controllers.js";
 import { body } from "express-validator";
 import { verifyUser } from "../middlewares/auth.middleware.js";
 
@@ -21,6 +21,8 @@ router.route('/logout').get(verifyUser, logoutUser)
 
 router.route('/get-user-profile').get(verifyUser, getUserProfile)
 
-router.route('/get-user-subscriptions').get(verifyUser, getUserSubscriptions)
+router.route('/get-user-subscriptions').get(verifyUser, getUserSubscriptions) 
+
+router.route('/add-address').post(verifyUser, addUserAddress)
 
 export default router

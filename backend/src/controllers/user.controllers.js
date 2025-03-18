@@ -182,5 +182,31 @@ const getUserSubscriptions = asyncHandler(async (req, res) => {
   .json(new ApiResponse(200, {subscriptions: user.subscriptions, message: "User subscriptions fetched successfully"}, "User subscriptions fetched successfully"))
 })
 
-export { registerUser, loginUser, logoutUser, getUserProfile, getUserSubscriptions };
+const addUserAddress = asyncHandler(async (req, res) => {
+  const { addressId } = req.body;
+
+  if (!addressId) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, { message: "Address ID is required" }, "Address ID is required"));
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { $push: { addresses: addressId } },
+    { new: true }
+  ).populate('addresses');
+
+  if (!user) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, { message: "Failed to add address" }, "Failed to add address"));
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user, message: "Address added successfully" }, "Address added successfully"));
+})
+
+export { registerUser, loginUser, logoutUser, getUserProfile, getUserSubscriptions, addUserAddress };
 

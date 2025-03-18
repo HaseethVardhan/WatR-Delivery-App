@@ -2,6 +2,7 @@ import Address from '../models/address.models.js';
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { validationResult } from "express-validator";
+import {User} from '../models/user.models.js';
 import axios from 'axios'
 
 const createAddress = asyncHandler(async (req, res) => {
@@ -100,4 +101,19 @@ const getAutoSuggestions = asyncHandler(async (req, res) => {
     }
 })
 
-export { createAddress, editAddress, getAutoSuggestions }
+const getUserAddress = asyncHandler(async (req, res) => {
+    
+    const user = await User.findById(req.user._id).populate('addresses');
+
+    if(!user) {
+        return res
+        .status(404)
+        .json(new ApiResponse(404, {message: 'User not found'}, 'User not found'))
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {addresses: user.addresses}, 'Addresses fetched successfully'))
+})
+
+export { createAddress, editAddress, getAutoSuggestions, getUserAddress } 

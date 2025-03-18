@@ -68,7 +68,7 @@ const UserHome = () => {
       <div className="flex justify-center">
       <Button
           onClick={() => {
-            navigate("/new-subscription-type");
+            navigate("/address-check");
           }}
           className="bg-green-500 shadow-none "
         >

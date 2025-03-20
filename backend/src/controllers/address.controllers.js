@@ -116,4 +116,5 @@ const getUserAddress = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {addresses: user.addresses}, 'Addresses fetched successfully'))
 })
 
+
 export { createAddress, editAddress, getAutoSuggestions, getUserAddress } 

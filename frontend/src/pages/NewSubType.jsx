@@ -1,11 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../customComponents/Navbar'
 
 const NewSubType = () => {
 
         const navigate = useNavigate()
+        const [searchParams] = useSearchParams();
+        const address = searchParams.get('address');
+    
 
         const [subType, setSubType] = useState('')
         const [loading, setLoading] = React.useState(false);
@@ -15,7 +18,7 @@ const NewSubType = () => {
                 setLoading(true)
                 setSubType(type)
                 if (subType) {
-                        navigate(`/available-products?type=${subType}`)
+                        navigate(`/available-products?type=${subType}&address=${address}`)
                 }
                 setLoading(false)
         }

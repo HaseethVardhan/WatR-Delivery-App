@@ -118,6 +118,10 @@ const AddCheck = () => {
     
   }, [newAddress]);
 
+  const continueHandler = async () => {
+    navigate(`/new-subscription-type?address=${selectedAddress}`);
+  }
+
 
   return (
     <div className="p-4">
@@ -144,6 +148,14 @@ const AddCheck = () => {
             <p>{address.placeString}</p>
           </div>
         ))}
+        {selectedAddress && (
+          <Button 
+            className="w-full mt-4 bg-green-500 shadow-none"
+            onClick={() => continueHandler()}
+          >
+            Continue
+          </Button>
+        )}
         <div className="mb-4">
           <Label htmlFor="address">New Address</Label>
           <Input

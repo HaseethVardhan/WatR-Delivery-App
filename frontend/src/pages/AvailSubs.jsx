@@ -1,14 +1,18 @@
 import React from 'react'
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom'
+import Navbar from '../customComponents/Navbar'
 
 const AvailSubs = () => {
 
-    const { type } = useParams();
+  const [searchParams] = useSearchParams()
+  const type = searchParams.get('type')
+  const address = searchParams.get('address')
+    
     
 
   return (
     <div>
-
+      <Navbar />
     </div>
   )
 }

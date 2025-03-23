@@ -2,6 +2,7 @@ import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Navbar from '../customComponents/Navbar'
 import axios from 'axios'
+import { Button } from '@/components/ui/button'
 
 const AvailSubs = () => {
 
@@ -10,9 +11,8 @@ const AvailSubs = () => {
   const address = searchParams.get('address')
 
   const [products, setProducts] = React.useState();
-
   React.useEffect(() => {
-    const getProducts = async () => {
+    const fetchProducts = async () => {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_BASE_URL}/product/get-products-available`,
@@ -26,19 +26,19 @@ const AvailSubs = () => {
             }
           }
         );
-  
+
+        console.log(response)
+
         if (response.status === 200) {
           setProducts(response.data.data.products);
         }
       } catch (error) {
         console.error("Error fetching available products:", error);
       }
-    }
+    };
 
-    getProducts()
-  })
-    
-    
+    fetchProducts();
+  }, [])
 
   return (
     <div>
@@ -50,11 +50,19 @@ const AvailSubs = () => {
               {products.map((product) => (
                 <div key={product._id} className="col-md-4 mb-3">
                   <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">{product.name}</h5>
-                      <p className="card-text">{product.description}</p>
-                      <p className="card-text">Price: ${product.price}</p>
-                      <p className="card-text">Type: {product.type}</p>
+                    <div className="card-body flex-column p-4">
+                      <h5 className="card-title font-black text-transform: uppercase">{product.supplierId.suppliername}</h5>
+                      {/* <p className="card-text text-transform: capitalize font-semibold">{product.productType}</p> */}
+                      <p className="card-text font-thin">{product.description}</p>
+                      <p className="card-text font-semibold">Price: ₹{product.cost} per {product.productType}</p>
+                      <p className="card-text font-semibold">Quantity: {product.quantity} litres/{product.productType}</p>
+                      <p className="card-text font-semibold">Minimum Order: {product.minimumOrderQuantity}</p>
+                      <Button 
+                        onClick={() => window.location.href = `/buy/${product._id}`}
+                        className="bg-green-500 shadow-none w-full mt-3"
+                      >
+                        Buy Now
+                      </Button>
                     </div>
                   </div>
                 </div>

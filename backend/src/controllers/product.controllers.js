@@ -65,72 +65,57 @@ const getProductsByTypeAndLocation = asyncHandler(async (req, res) => {
                 .json(new ApiResponse(404, { message: "Address not found" }, "Address not found"));
         }
         
-        console.log('hi')
-        // Find suppliers within 20km radius
-        const suppliers1 = await Supplier.find().populate({
-            path: 'address',
-            options: { strictPopulate: false }
-          }).exec();
+    // Get all suppliers
+    let suppliers = await Supplier.find().populate('address');
 
-        // suppliers = JSON.stringify(suppliers, null, 2)
+    // Earth's radius in km
+    const EARTH_RADIUS = 6371;
+    const MAX_DISTANCE = 20; // 20km radius
 
-        console.log(suppliers1)
+    // Filter suppliers within 20km
+    const nearbySuppliers = suppliers.filter(supplier => {
+        // Skip suppliers without address/location
+        if (!supplier.address?.location) return false;
+        
+        // Convert coordinates to radians
+        const lat1 = address.location.ltd * Math.PI/180;
+        const lon1 = address.location.lng * Math.PI/180;
+        const lat2 = supplier.address.location.ltd * Math.PI/180; 
+        const lon2 = supplier.address.location.lng * Math.PI/180;
 
-        console.log('now filtering')
+        // Haversine formula components
+        const dLat = lat2 - lat1;
+        const dLon = lon2 - lon1;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1) * Math.cos(lat2) * 
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        
+        // Calculate distance
+        const distance = EARTH_RADIUS * c;
 
-        const example = suppliers1.filter(supplier => {
-            console.log(supplier.address)
-        })
+        return distance <= MAX_DISTANCE;
+    });
 
-        // Filter suppliers within 20km using Haversine formula
-        const nearbySuppliers = suppliers1.filter(supplier => {
-            // Earth's radius in km
-            const R = 6371;
+    suppliers = nearbySuppliers;
 
-            const lat1 = parseFloat(address.location.ltd); 
-            // console.log(lat1);
-            const lon1 = parseFloat(address.location.lng);
-            // console.log(lon1);
-            // console.log(supplier)
-            const lat2 = parseFloat(supplier.address.location.ltd);
-            // console.log(lat2);
-            const lon2 = parseFloat(supplier.address.location.lng);
-
-            // console.log(lon2);
-
-            // Convert degrees to radians
-            const lat1Rad = lat1 * Math.PI/180;
-            const lon1Rad = lon1 * Math.PI/180;
-            const lat2Rad = lat2 * Math.PI/180; 
-            const lon2Rad = lon2 * Math.PI/180;
-
-            // Differences in coordinates
-            const dLat = lat2Rad - lat1Rad;
-            const dLon = lon2Rad - lon1Rad;
-
-            // Haversine formula
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1Rad) * Math.cos(lat2Rad) * 
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            const distance = R * c;
-
-            // Return true if within 20km
-            return distance <= 20;
-        });
-
-        const suppliers = nearbySuppliers;
-
-        console.log(suppliers)
+        
         const supplierIds = suppliers.map(supplier => supplier._id);
         
         const products = await Product.find({
             productType: type,
             supplierId: { $in: supplierIds }
-        }).populate('supplierId', 'name location');
+        }).populate({
+            path: 'supplierId',
+            model: 'Supplier',
+            select: 'suppliername address',
+            populate: {
+                path: 'address',
+                model: 'Address',
+                select: 'location'
+            }
+        });
         
-        console.log('hi3')
         return res
             .status(200)
             .json(new ApiResponse(200, { products, message: "Products fetched successfully" }, "Products fetched successfully"))

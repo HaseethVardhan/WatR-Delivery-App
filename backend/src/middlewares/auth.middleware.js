@@ -8,7 +8,7 @@ import { Supplier } from "../models/supplier.models.js";
 export const verifyUser = asyncHandler(async (req,res, next) => {
     
         const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
-    
+
         if(!token){
             return res.
             status(400)

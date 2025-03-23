@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { verifySupplier } from "../middlewares/auth.middleware.js";
-import { createProduct, viewSupplierProducts } from "../controllers/product.controllers.js";
+import { verifySupplier, verifyUser } from "../middlewares/auth.middleware.js";
+import { createProduct, getProductsByTypeAndLocation, viewSupplierProducts } from "../controllers/product.controllers.js";
 
 const router = Router();
 
@@ -13,5 +13,7 @@ router.route('/create').post([
 ], verifySupplier, createProduct)
 
 router.route('/view-products').get(verifySupplier, viewSupplierProducts)
+
+router.route('/get-products-available').post( verifyUser, getProductsByTypeAndLocation)
 
 export default router

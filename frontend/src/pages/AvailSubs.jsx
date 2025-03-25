@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import Navbar from '../customComponents/Navbar'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -9,6 +9,8 @@ const AvailSubs = () => {
   const [searchParams] = useSearchParams()
   const type = searchParams.get('type')
   const address = searchParams.get('address')
+
+  const navigate = useNavigate()
 
   const [products, setProducts] = React.useState();
   React.useEffect(() => {
@@ -26,8 +28,6 @@ const AvailSubs = () => {
             }
           }
         );
-
-        console.log(response)
 
         if (response.status === 200) {
           setProducts(response.data.data.products);
@@ -58,7 +58,7 @@ const AvailSubs = () => {
                       <p className="card-text font-semibold">Quantity: {product.quantity} litres/{product.productType}</p>
                       <p className="card-text font-semibold">Minimum Order: {product.minimumOrderQuantity}</p>
                       <Button 
-                        onClick={() => window.location.href = `/buy/${product._id}`}
+                        onClick={() => navigate(`/order?productId=${product._id}&addressId=${address}`)}
                         className="bg-green-500 shadow-none w-full mt-3"
                       >
                         Buy Now

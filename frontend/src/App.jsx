@@ -14,6 +14,7 @@ import SupplierCustomers from './pages/SupplierCustomers.jsx'
 import NewSubType from './pages/NewSubType.jsx'
 import AvailSubs from './pages/AvailSubs.jsx'
 import AddCheck from './pages/AddCheck.jsx'
+import Order from './pages/Order.jsx'
 
 
 function App() {
@@ -34,6 +35,11 @@ function App() {
         <Route path='/new-subscription-type' element={
           <UserProtectedWrapper>
             <NewSubType />
+          </UserProtectedWrapper>
+        } />
+        <Route path='/order' element={
+          <UserProtectedWrapper>
+            <Order />
           </UserProtectedWrapper>
         } />
         <Route path='/available-products' element={

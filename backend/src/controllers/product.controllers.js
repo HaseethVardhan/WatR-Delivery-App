@@ -125,4 +125,34 @@ const getProductsByTypeAndLocation = asyncHandler(async (req, res) => {
     }
 })
 
-export {createProduct, viewSupplierProducts, getProductsByTypeAndLocation}
+const getProduct = asyncHandler(async (req, res) => {
+    const { productId } = req.body;
+
+    if (!productId) {
+        return res
+            .status(400)
+            .json(new ApiResponse(400, { message: "Product ID is required" }, "Product ID is required"));
+    }
+
+    const product = await Product.findById(productId)
+        .populate({
+            path: 'supplierId',
+            select: 'suppliername address',
+            populate: {
+                path: 'address',
+                select: 'location placeString'
+            }
+        });
+
+    if (!product) {
+        return res
+            .status(404)
+            .json(new ApiResponse(404, { message: "Product not found" }, "Product not found"));
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { product, message: "Product fetched successfully" }, "Product fetched successfully"));
+})
+
+export {createProduct, viewSupplierProducts, getProductsByTypeAndLocation, getProduct}

@@ -116,5 +116,27 @@ const getUserAddress = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {addresses: user.addresses}, 'Addresses fetched successfully'))
 })
 
+const getAddress = asyncHandler(async (req, res) => {
+    const { addressId } = req.body;
 
-export { createAddress, editAddress, getAutoSuggestions, getUserAddress } 
+    if (!addressId) {
+        return res
+        .status(400)
+        .json(new ApiResponse(400, {message: 'Address ID is required'}, 'Address ID is required'));
+    }
+
+    const address = await Address.findById(addressId);
+
+    if (!address) {
+        return res
+        .status(404)
+        .json(new ApiResponse(404, {message: 'Address not found'}, 'Address not found'));
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {address}, 'Address fetched successfully'));
+})
+
+
+export { createAddress, editAddress, getAutoSuggestions, getUserAddress, getAddress } 

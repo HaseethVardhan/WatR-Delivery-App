@@ -40,7 +40,6 @@ const AddCheck = () => {
   };
 
   const createNewAddress = async () => {
-    console.log(newAddress);
     setLoading(true);
     try {
       // Validate if address is selected

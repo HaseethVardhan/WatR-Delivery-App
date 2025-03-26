@@ -44,6 +44,11 @@ const SupplierCustomers = () => {
     <div className="p-4">
       <h1 className="font-black text-xl pb-5">Active Customers</h1>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {subscriptions?.length === 0 && (
+            <div className="col-span-full text-center text-gray-500 py-8">
+                No active customers found.
+            </div>
+        )}
         {subscriptions?.map((subscription, index) => (
             <div key={index} className="p-4 border rounded-lg shadow">
                 <h2 className="font-bold text-lg">{subscription.customerInfo.username.firstname+" "+subscription.customerInfo.username.lastname}</h2>

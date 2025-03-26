@@ -72,6 +72,9 @@ const SupplierHome = () => {
       </div>
       <h1 className="font-bold text-lg p-3">Today's Deliveries</h1>
       <div className="flex flex-col justify-center p-3 ">
+        {subscriptions?.length === 0 && (
+          <div className="text-gray-500 text-center">No deliveries today</div>
+        )}
         {subscriptions !== undefined &&
           subscriptions.map((subscription) => (
             <div key={subscription._id}>

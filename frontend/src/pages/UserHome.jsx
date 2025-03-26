@@ -79,6 +79,11 @@ const UserHome = () => {
       <div className="p-4">
         <h1 className="font-black text-xl pb-5">Your Active Subscriptions</h1>
         <div className="grid gap-4">
+          {subscriptions?.length === 0 && (
+            <div className="text-center p-4 text-gray-500">
+              No active subscriptions found
+            </div>
+          )}
           {subscriptions?.map((subscription) => (
             <div
               key={subscription._id}

@@ -41,6 +41,12 @@ const SupplierViewProducts = () => {
     <div className="flex flex-col p-4">
         <h1 className="font-black text-xl pb-5">Your Subscription Models</h1>
         <div className="grid gap-4">
+            {products?.length === 0 && (
+                <div className="text-center py-8">
+                    <p className="text-gray-600 mb-4">You haven't created any subscription models yet</p>
+                    
+                </div>
+            )}
             {products?.map((product) => (
                 <div 
                     key={product._id}

@@ -18,7 +18,7 @@ const Intro = () => {
           <div className='absolute bottom-2 left-3'>
             <h1 className='text-white font-sans text-3xl font-black'>Drinking water,</h1>
             <h1 className='text-white font-sans text-3xl font-black'>delivered</h1>
-            <p className='text-white text-xs py-3'>Get your first month free. Cancel anytime.</p>
+            <p className='text-white text-xs py-3'>One place to manage all your water needs.</p>
             <Link to='/user-home'>
               <Button className='bg-[#2180DE] font-sans rounded-xl text-sm font-semibold'>Start now</Button>
             </Link>
@@ -36,25 +36,25 @@ const Intro = () => {
 
           <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
             <CardHeader className='py-5'>
-            <i className="ri-truck-line text-xl"></i>
-              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
-              <CardDescription className=''>Fast and free delivery</CardDescription>
+            <i className="ri-leaf-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Fresh Water</CardTitle>
+              <CardDescription className=''>Fresh Drinking Water</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
             <CardHeader className='py-5'>
-            <i className="ri-truck-line text-xl"></i>
-              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
-              <CardDescription className=''>Fast and free delivery</CardDescription>
+            <i className="ri-time-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Subscribe Easy</CardTitle>
+              <CardDescription className=''>Subscription process made easy</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className='w-[50%]  max-w-[175px] shadow-inherit rounded-2xl mt-2'>
             <CardHeader className='py-5'>
-            <i className="ri-truck-line text-xl"></i>
-              <CardTitle className='font-bold text-lg '>Free Delivery</CardTitle>
-              <CardDescription className=''>Fast and free delivery</CardDescription>
+            <i className="ri-wallet-line text-xl"></i>
+              <CardTitle className='font-bold text-lg '>Pocket Friendly</CardTitle>
+              <CardDescription className=''>Best price at one place</CardDescription>
             </CardHeader>
           </Card>
         </div>
@@ -64,7 +64,7 @@ const Intro = () => {
         </Link>
         </div>
         <div className='flex justify-center'>
-        <p className='text-gray-400 mb-6'>© 2022 Watr. All rights reserved.</p>
+        <p className='text-gray-400 mb-6'>© 2025 Watr. All rights reserved.</p>
         </div>
     </div>
   )

@@ -17,6 +17,19 @@ const [quantity, setQuantity] = React.useState(0);
 const [loading, setLoading] = React.useState(true);
 const [error, setError] = React.useState("");
 
+const [selectedStartDate, setSelectedStartDate] = React.useState(new Date(Date.now() + 24 * 60 * 60 * 1000));
+const [selectedEndDate, setSelectedEndDate] = React.useState(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
+
+const handleStartDateChange = (event) => {
+    const newStartDate = new Date(event.target.value);
+    setSelectedStartDate(newStartDate);
+};
+
+const handleEndDateChange = (event) => {
+    const newEndDate = new Date(event.target.value);
+    setSelectedEndDate(newEndDate);
+};
+
 const startDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString();
 const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString();
 
@@ -69,7 +82,9 @@ const handleConfirmOrder = async () => {
             {
                 productId,
                 quantity,
-                addressId
+                addressId,
+                startDate: selectedStartDate.toISOString(),
+                endDate: selectedEndDate.toISOString(),
             },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -118,8 +133,28 @@ return (
 
                 <div className="border rounded-lg p-4">
                     <h3 className="font-semibold mb-2">Subscription Period</h3>
-                    <p>Start Date: {startDate}</p>
-                    <p>End Date: {endDate}</p>
+                    <div className="space-y-2">
+                        <div>
+                            <label className="block text-sm text-gray-600">Start Date:</label>
+                            <input
+                                type="date"
+                                value={selectedStartDate.toISOString().split('T')[0]}
+                                onChange={handleStartDateChange}
+                                min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                                className="border rounded p-2 w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm text-gray-600">End Date:</label>
+                            <input
+                                type="date"
+                                value={selectedEndDate.toISOString().split('T')[0]}
+                                onChange={handleEndDateChange}
+                                min={selectedStartDate.toISOString().split('T')[0]}
+                                className="border rounded p-2 w-full"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <div className="border rounded-lg p-4">
@@ -150,8 +185,8 @@ return (
 
                 <div className="border rounded-lg p-4">
                     <h3 className="font-semibold mb-2">Total Cost</h3>
-                    <p className="text-xl">₹{product.cost * quantity * 30}</p>
-                    <p className="text-sm text-gray-500">For 30 days</p>
+                    <p className="text-xl">₹{product.cost * quantity * Math.ceil((selectedEndDate - selectedStartDate) / (1000 * 60 * 60 * 24))}</p>
+                    <p className="text-sm text-gray-500">For {Math.ceil((selectedEndDate - selectedStartDate) / (1000 * 60 * 60 * 24))} days</p>
                 </div>
 
                 <Button

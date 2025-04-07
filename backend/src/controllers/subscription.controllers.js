@@ -6,14 +6,28 @@ import {Product} from '../models/product.models.js'
 import { Subscription } from "../models/subscription.models.js";
 
 const createSubscription = asyncHandler(async (req, res) => {
-
     if(!validationResult(req).isEmpty()){
         return res
         .status(400)
         .json(new ApiResponse(400, {message: 'Enter valid quantity'}, 'Enter valid quantity'))
     }
 
-    const {productId, quantity, addressId} = req.body
+    const {productId, quantity, addressId, startDate, endDate} = req.body
+
+    if (!startDate || !endDate) {
+        return res
+        .status(400)
+        .json(new ApiResponse(400, {message: 'Start and end dates are required'}, 'Start and end dates are required'))
+    }
+
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+
+    if (start >= end) {
+        return res
+        .status(400)
+        .json(new ApiResponse(400, {message: 'End date must be after start date'}, 'End date must be after start date'))
+    }
 
     const product = await Product.findById(productId).populate('supplierId')
 
@@ -29,14 +43,16 @@ const createSubscription = asyncHandler(async (req, res) => {
         .json(new ApiResponse(400, {message: 'Please ensure minimum quantity'}, 'Please ensure minimum quantity'))
     }
 
+    const daysDifference = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+
     const subscription = await Subscription.create({
         customer: req.user._id,
         product: product._id,
         supplier: product.supplierId._id,
         quantity,
         address: addressId,
-        cost: product.cost * quantity * 30,
-        expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        cost: product.cost * quantity * daysDifference,
+        expiryDate: end
     })
 
     if (!subscription) {

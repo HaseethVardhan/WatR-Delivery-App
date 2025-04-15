@@ -89,6 +89,8 @@ const getAutoSuggestions = asyncHandler(async (req, res) => {
             `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.GOOGLE_MAPS_API}`
         );
 
+        console.log(response)
+
         const suggestions = response.data.predictions
         return res
         .status(200)

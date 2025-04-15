@@ -42,7 +42,7 @@ const SupplierRegister = () => {
     }
 
     func()
-    console.log(otheraddress)
+    console.log(suggestedAddresses)
 
   }, [address])
 

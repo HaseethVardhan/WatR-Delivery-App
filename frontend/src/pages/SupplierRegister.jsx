@@ -39,6 +39,7 @@ const SupplierRegister = () => {
   
       setSuggestedAddresses(response.data.data)
       setPopup(true)
+      console.log(response)
     }
 
     func()
